@@ -1,0 +1,32 @@
+﻿@using RecordShopClassLibrary.Models.Create
+@model OrderAddressCreateModel
+
+<div class="row justify-content-center align-align-items-center">
+
+    <div class=" col-12 col-md-4">
+
+    <h4>Address</h4>
+    <hr />
+    <form asp-controller="Order" asp-action="OrderCreated" method="post" class="border-2">
+    <div class="mb-3">
+	<label asp-for="@Model.Address.StreetAddress" class="control-label"></label>
+    <input type="text" asp-for="@Model.Address.StreetAddress" class="form-control"/>
+    </div>
+    <div class="mb-3">
+    <label asp-for="@Model.Address.PostalCode" class="control-label"></label>
+    <input type="text" asp-for="@Model.Address.PostalCode" class="form-control"/>
+    </div>
+    <div class="mb-3">
+    <label asp-for="@Model.Address.City" class="control-label"></label>
+    <input type="text" asp-for="@Model.Address.City" class="form-control"/>
+    </div>
+    <input type="hidden" asp-for="@Model.Order.CustomerId"/>
+     <input type="hidden" asp-for="@Model.Order.TotalPrice"/>
+     <input type="hidden" asp-for="@Model.Order.CustomerName"/>
+
+     <div class="mb-3">
+     <input type="submit" value="Send Order" model="@Model" class="btn btn-primary" />
+     </div>
+        </form>
+    </div>
+</div>

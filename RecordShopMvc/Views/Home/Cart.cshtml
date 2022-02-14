@@ -1,0 +1,13 @@
+﻿@using RecordShopClassLibrary.Models.Read
+@model CartPageViewModel
+
+
+<h1>Your Shoppingcart</h1>
+
+<partial name="_cartItemTablePartial" model="Model"/>
+
+
+<h2>Total Price:<h3>@Model.TotalPrice<h3></h2> 
+
+<a asp-controller="Order" asp-action="Address" model=@Model class="btn btn-dark">
+<i class="bi bi-plus-circle"></i>Order</a>

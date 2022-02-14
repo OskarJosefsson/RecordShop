@@ -1,0 +1,31 @@
+﻿@using RecordShopClassLibrary.Models.Read
+ @model ProductViewModel
+
+    
+    <form asp-action="BuyProduct" method="post">
+    <h5 class="card-title">@Model.Name</h5>
+    <input type="hidden" asp-for="@Model.Name"/>
+    <div>
+    <input type="hidden" asp-for="@Model.Id"/>
+    <label asp-for="@Model.Description" class="card-text">@Model.Description</label>
+    <input type="hidden" asp-for="@Model.Description"/>
+    </div>
+    <div>
+    <label asp-for="@Model.Price" class="card-text">Price: @Model.Price kr</label>
+    <input type="hidden" asp-for="@Model.Price"/>
+    </div>
+    <div>
+    <label asp-for="@Model.CategoryName" class="card-text">Category: @Model.CategoryName</label>
+    <input type="hidden" asp-for="@Model.CategoryName"/>
+    </div>
+    <div>
+    <label asp-for="@Model.Quantity"></label>
+    <input asp-for="@Model.Quantity" type="number" min="1" value="1"/>
+    </div>
+    <hr>	
+    <button type="submit" model="@Model" class="btn btn-dark">
+    <i class="bi bi-plus-circle"></i>Add to Cart</button>
+    <a asp-controller="Home" asp-action="ProductDetail" model=@Model asp-route-id=@Model.Id class="btn btn-dark">
+    <i class="bi bi-plus-circle"></i>More details</a>
+
+</form>

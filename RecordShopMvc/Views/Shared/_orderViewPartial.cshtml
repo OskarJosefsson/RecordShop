@@ -1,0 +1,27 @@
+﻿@using RecordShopClassLibrary.Models.Read
+@model OrderViewModel
+
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">OrderId</th>
+      <th scope="col">Order Sent</th>
+      <th scope="col">Address</th>
+      
+    </tr>
+  </thead>
+ <tbody>
+   <td>@Model.Id</td>
+   <td>@Model.Created</td>
+   <td>@Model.Address.StreetAdress,@Model.Address.Postalcode, @Model.Address.City</td>
+
+</tbody>
+</table>
+
+    <partial name="_orderDetailsPartial" title="" model="@Model.OrderDetails"/>
+
+ <p>Price: @Model.TotalPrice Kr</p>
+
+

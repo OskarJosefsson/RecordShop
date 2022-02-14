@@ -1,0 +1,14 @@
+﻿@using RecordShopClassLibrary.Models.Read
+@model IEnumerable<OrderViewModel>
+
+	
+			<h2>Orders:</h2>
+			@foreach(var item in Model)
+	{
+		
+
+		<partial name="_orderViewPartial" model="item"/>
+
+	}
+	
+
