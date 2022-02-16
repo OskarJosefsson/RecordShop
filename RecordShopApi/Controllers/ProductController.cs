@@ -14,7 +14,7 @@ namespace RecordShopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[ApiKeyAuth]
+    
     public class ProductController : ControllerBase
     {
         private readonly SqlContext _context;
@@ -37,7 +37,7 @@ namespace RecordShopApi.Controllers
                 foreach (var item in await _context.Products.Include(x => x.Category).ToListAsync())
                 {
                     CategoryViewModel category = new CategoryViewModel(item.Id, item.Category.Name);
-                    products.Add(new ProductViewModel(item.Id, item.Name, item.Description, item.Price, item.Category.Name));
+                    products.Add(new ProductViewModel(item.Id, item.Name, item.Description, item.Price, item.Category.Name, item.CategoryID));
 
 
                  
@@ -58,11 +58,12 @@ namespace RecordShopApi.Controllers
                 return NotFound();
             }
             CategoryViewModel category = new CategoryViewModel(item.Id, item.Category.Name);
-            ProductViewModel product = new ProductViewModel(item.Id, item.Name, item.Description, item.Price, item.Category.Name);
+            ProductViewModel product = new ProductViewModel(item.Id, item.Name, item.Description, item.Price, item.Category.Name,item.CategoryID);
             return product;
         }
         #endregion
         #region Post
+        [ApiKeyAuth]
         [HttpPost]
         public async Task<ActionResult<ProductEntity>> PostProductEntity(ProductCreateModel productModel)
         {
@@ -72,9 +73,9 @@ namespace RecordShopApi.Controllers
             _context.Products.Add(productEntity);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProductEntity", new { id = productEntity.Id }, productEntity);
+            return NoContent();
         }
-       
+        [ApiKeyAuth]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductEntity(int id, ProductEditModel model)
         {
@@ -104,7 +105,8 @@ namespace RecordShopApi.Controllers
         }
 
         #endregion
-       
+
+        [ApiKeyAuth]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductEntity(int id)
         {
@@ -122,7 +124,7 @@ namespace RecordShopApi.Controllers
         
         private bool ProductEntityExists(int id)
         {
-            throw new NotImplementedException();
+            return _context.Products.Any(e => e.Id == id);
         }
 
     }

@@ -1,15 +1,19 @@
 ﻿
 @using Microsoft.AspNetCore.Identity
+@using RecordShopClassLibrary.Models.Read
 @using RecordShopMvc.Models.Entities
 @inject SignInManager<ApplicationUser> SignInManager
+@model ProductPageViewModel
 
+	<div class="text-align-left">
+		<h1>
+	Products
+	</h1>
+	</div>
 
-<h1>
-	Här är alla produkter
-</h1>
 
 	<partial name="_dropDownPartial" model="Model" />
 	
-    <partial name="_productDeckPartial" model="Model.Products"/>
+    <partial name="_productDeckPartial" model="Model"/>
 
 

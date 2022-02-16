@@ -1,5 +1,7 @@
 ﻿@using RecordShopClassLibrary.Models.Read
 @model ProductPageViewModel
+        <div class="row">
+        <div class="col-3">
 
         <form asp-action="Products">
         <label asp-for="@Model.CategoryId"></label>
@@ -7,10 +9,13 @@
         <option value=0>--Select Category--</option>
         </select>
         <span asp-validation-for="@Model.CategoryId.Value" class="text-danger"></span>
-		<button type="submit"  asp-controller="Home" asp-action="Products" model="Model" class="btn btn-pimary" style="width:150px">Sort by Category</button>
+        <div class ="col-3">
+            <button type="submit"  asp-controller="Home" asp-action="Products" model="Model" class="btn btn-dark border mt-2" style="width:150px">Sort by Category</button>
+        </div>
+		
         </form>
-        <form>
-            <input type="Hidden" asp-for="@Model.CategoryId" value="0" />
-            <button type="submit"  asp-controller="Home" asp-action="Products" model="Model" class="btn btn-pimary" style="width:150px">Reset</button>
-        </form>
+
+        </div>
+         </div>
+
         

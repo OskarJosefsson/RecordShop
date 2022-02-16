@@ -27,6 +27,7 @@ namespace RecordShopApi.Controllers
             _context = context;
         }
 
+        #region Get
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDetailViewModel>>> GetOrderDetails()
         {
@@ -72,8 +73,9 @@ namespace RecordShopApi.Controllers
 
             return orderDetail;
         }
+        #endregion
 
-
+        #region PostPut
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOrderDetailEntity(int id, OrderDetailEntity orderDetailEntity)
         {
@@ -105,17 +107,21 @@ namespace RecordShopApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<OrderDetailEntity>> PostOrderDetailEntity(OrderDetailCreateModel orderDetail)
+        public async Task PostOrderDetailEntity(OrderDetailCreateModel orderDetail)
         {
             OrderDetailEntity orderDetailEntity = new OrderDetailEntity(orderDetail.Quantity,orderDetail.ProductId,orderDetail.Price, orderDetail.OrderId);
 
             _context.OrderDetails.Add(orderDetailEntity);
+
+
+
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrderDetailEntity", new { id = orderDetailEntity.Id }, orderDetailEntity);
         }
 
-    
+        #endregion
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrderDetailEntity(int id)
         {

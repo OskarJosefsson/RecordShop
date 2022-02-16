@@ -16,16 +16,16 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
-builder.Services.AddDbContext<SqlContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction: sqlOptions =>
-{
-    sqlOptions.EnableRetryOnFailure
-    (maxRetryCount: 10,
-    maxRetryDelay: TimeSpan.FromSeconds(30),
-    errorNumbersToAdd: null);
+builder.Services.AddDbContext<SqlContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+));
+//, sqlServerOptionsAction: sqlOptions =>
+//  {
+//      //sqlOptions.EnableRetryOnFailure
+//      //(maxRetryCount: 10,
+//      //maxRetryDelay: TimeSpan.FromSeconds(30),
+//      //errorNumbersToAdd: null);
 
-})
-);
-
+//  })
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

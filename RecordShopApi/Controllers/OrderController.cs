@@ -10,12 +10,13 @@ using RecordShopApi.Filters;
 using RecordShopClassLibrary.Models.Create;
 using RecordShopClassLibrary.Models.Entities;
 using RecordShopClassLibrary.Models.Read;
+using RecordShopClassLibrary.Models.Update;
 
 namespace RecordShopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+    [ApiKeyAuth]
     public class OrderController : ControllerBase
     {
         private readonly SqlContext _context;
@@ -65,9 +66,9 @@ namespace RecordShopApi.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderViewModel>> GetOrder(Guid orderId)
+        public async Task<ActionResult<OrderEntity>> GetOrder(Guid orderId)
         {
-           var result = await _context.Orders.Include(x => x.Address).ToListAsync();
+            var result = await _context.Orders.Include(x => x.Address).ToListAsync();
 
             var customerOrders = result.Where(x => x.Id == orderId);
 
@@ -79,36 +80,48 @@ namespace RecordShopApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostOrderEntity(OrderAddressCreateModel model)
         {
-           
-            
-            
+
+            //OrderDetailController orderDetailController = new OrderDetailController(_context);
+
             if (!OrderEntityExists(model.Order.OrderId)) 
             {
-                AddressController addressController = new AddressController(_context);
-                int addressId = await addressController.PostAddress(model.Address);
-                
+                //AddressController addressController = new AddressController(_context);
+                //int addressId = await addressController.PostAddress(model.Address);
 
-                OrderEntity orderEntity = new OrderEntity(model.Order.OrderId, model.Order.CustomerId, model.Order.CustomerName, DateTime.Now, model.Order.TotalPrice, addressId);
+                AddressEntity addressEntity = new AddressEntity(model.Address.StreetAddress, model.Address.PostalCode, model.Address.City);
+
+                _context.Addresses.Add(addressEntity);
+                await _context.SaveChangesAsync();
+
+                OrderEntity orderEntity = new OrderEntity(model.Order.OrderId, model.Order.CustomerId, model.Order.CustomerName, DateTime.Now, model.Order.TotalPrice, addressEntity.Id);
                 
                 _context.Orders.Add(orderEntity);
+
                 await _context.SaveChangesAsync();
+
 
                 foreach (var item in model.CartItems)
                 {
-                    OrderDetailCreateModel odcm = new OrderDetailCreateModel();
+                    //OrderDetailCreateModel odcm = new OrderDetailCreateModel();
 
-                    odcm.OrderId = orderEntity.Id;
-                    odcm.ProductId = item.Product.Id;
-                    odcm.Quantity = item.Quantity;
-                    odcm.Price = item.Product.Price;
+                    //odcm.OrderId = orderEntity.Id;
+                    //odcm.ProductId = item.Product.Id;
+                    //odcm.Quantity = item.Quantity;
+                    //odcm.Price = item.Product.Price;
+
+                    OrderDetailEntity orderDetailEntity = new OrderDetailEntity(item.Quantity, item.Product.Id, item.Product.Price, orderEntity.Id);
+
+                    _context.OrderDetails.Add(orderDetailEntity);
 
 
-                    OrderDetailController orderDetailController = new OrderDetailController(_context);
-                    orderDetailController.PostOrderDetailEntity(odcm);
-                   
+                    
 
                 }
-                return CreatedAtAction("GetOrderEntity", new { id = orderEntity.Id }, orderEntity);
+
+
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
 
             return BadRequest();
@@ -116,14 +129,19 @@ namespace RecordShopApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOrder(Guid id, OrderEntity orderEntity)
+        public async Task<IActionResult> PutOrder(Guid id, OrderEditEntity orderEditModel)
         {
-            if (id != orderEntity.Id)
+
+
+
+            var result = await _context.Orders.FindAsync(id);
+            result.TotalPrice = orderEditModel.TotalPrice;
+            if (id != result.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(orderEntity).State = EntityState.Modified;
+            _context.Entry(result).State = EntityState.Modified;
 
             try
             {

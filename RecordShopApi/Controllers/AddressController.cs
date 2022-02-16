@@ -6,14 +6,13 @@ using RecordShopClassLibrary.Models.Read;
 using RecordShopClassLibrary.Models.Entities;
 using RecordShopClassLibrary.Models.Create;
 using Microsoft.AspNetCore.Authorization;
+using RecordShopApi.Filters;
 
 namespace RecordShopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
-
-
+    [ApiKeyAuth]
     public class AddressController : ControllerBase
     {
         private readonly SqlContext _context;
@@ -53,10 +52,8 @@ namespace RecordShopApi.Controllers
             return addressEntity;
         }
         #endregion
-
         #region Post
         [HttpPost]
-  
         public async Task<int> PostAddress(AddressCreateModel model)
         {
 
@@ -65,12 +62,8 @@ namespace RecordShopApi.Controllers
             _context.Addresses.Add(addressEntity);
             await _context.SaveChangesAsync();
 
-
             return addressEntity.Id;
         }
-
-
-
 
         #endregion
 

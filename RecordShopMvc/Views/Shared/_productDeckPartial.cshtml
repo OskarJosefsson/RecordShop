@@ -1,21 +1,19 @@
 ﻿@using RecordShopClassLibrary.Models.Read
-@model IEnumerable<ProductViewModel>
-
-<div class="row row-cols-1 row-cols-md-4 g-4">
-
-		@foreach(var product in Model)
+@model ProductPageViewModel
+	<div class="row">
+		@foreach(var product in Model.Products)
 		{
-		
-		
-			<div class="card" style="width: 18rem;">
- 
+			
+			<div class="col-3 m-4">
+
+			<div class="card offset- border" style="width: 18rem;">
 			<div class="card-body">
 
 			<partial name="_productInfoPartial" title="" model="product"/>
 
-</div>  
-
-</div>
-        
-
+			</div>  
+			</div>  
+			</div>
+			
 		}
+		</div>

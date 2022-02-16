@@ -21,6 +21,7 @@ namespace RecordShopClassLibrary.Models.Read
             Description = description;
             Price = price;
             this.CategoryName = categoryName;
+        
         }
 
         public ProductViewModel(int id, string name, string description, decimal price, string category, int amount)
@@ -30,7 +31,7 @@ namespace RecordShopClassLibrary.Models.Read
             Description = description;
             Price = price;
             CategoryName = category;
-
+            
         }
 
         public int Id { get; set; }
@@ -42,6 +43,8 @@ namespace RecordShopClassLibrary.Models.Read
         public decimal Price { get; set; }
 
         public string CategoryName { get; set; }
+
+   
 
         public int Quantity { get; set; }
 

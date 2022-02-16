@@ -22,11 +22,12 @@ namespace RecordShopMvc.Services
 
     public class OrderService : IOrderService
     {
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICartService _cartService;
 
-        public OrderService(ICartService cartService)
+        public OrderService(IHttpContextAccessor httpContextAccessor, ICartService cartService)
         {
+            _httpContextAccessor = httpContextAccessor;
             _cartService = cartService;
         }
 
@@ -123,7 +124,7 @@ namespace RecordShopMvc.Services
             orderAddress.Order.OrderId = orderId;
             orderAddress.Address.OrderId = orderId;
             orderAddress.Order.TotalPrice = TotalPrice(orderAddress.CartItems);
-      
+            orderAddress.Order.CustomerId = GetId();
 
             using (var client = new HttpClient())
             {
@@ -147,5 +148,32 @@ namespace RecordShopMvc.Services
             return totalPrice;
         }
 
+        public decimal DetailPrice(IEnumerable<CartItemCreateModel> items)
+        {
+            decimal totalPrice = 0;
+
+            foreach (var item in items)
+            {
+
+                totalPrice += item.Quantity * item.Product.Price;
+            }
+
+
+            return totalPrice;
+        }
+
+
+        public Guid GetId()
+        {
+
+            var claimsIdentity = (ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            return new Guid(claim.Value);
+        }
+
+
+
     }
 }
+
+

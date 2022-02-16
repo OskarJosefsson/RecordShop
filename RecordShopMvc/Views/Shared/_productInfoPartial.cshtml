@@ -3,11 +3,10 @@
 
     
     <form asp-action="BuyProduct" method="post">
+    <input type="hidden" asp-for="@Model.Id" />
     <h5 class="card-title">@Model.Name</h5>
     <input type="hidden" asp-for="@Model.Name"/>
     <div>
-    <input type="hidden" asp-for="@Model.Id"/>
-    <label asp-for="@Model.Description" class="card-text">@Model.Description</label>
     <input type="hidden" asp-for="@Model.Description"/>
     </div>
     <div>

@@ -52,14 +52,28 @@ namespace RecordShopMvc.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ApplicationUser currentUser = _userManager.Users.FirstOrDefault(x => x.Id == claim.Value);
+
+
+
             string myName = currentUser.FirstName + " " + currentUser.LastName;
             model.Order.CustomerName = myName;
-            model.Order.CustomerId = new Guid(claim.Value);
+        
             model.CartItems = cartItems;
 
 
-          await _orderService.PostOrder(model);
-          return RedirectToAction("Products", "Home");
+            await _orderService.PostOrder(model);
+
+            foreach (var item in cartItems)
+            {
+                Console.WriteLine(item.Product.Name);
+            }
+            
+            cartItems.Clear();
+            SessionService.SetObjectAsJson(HttpContext.Session, "shoppingCart", cartItems);
+
+
+
+            return RedirectToAction("Products", "Home");
 
         }
     }

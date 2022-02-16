@@ -1,24 +1,46 @@
 ﻿@using RecordShopClassLibrary.Models.Read
 @model ProductViewModel
+<div>
 
 <form asp-action="BuyProduct" method="post">
-	<input type="hidden" asp-for="@Model.Id"/>
-<h1>@Model.Name</h1>
+<input type="hidden" asp-for="@Model.Id"/>
 <input type="hidden" asp-for="@Model.Name"/>
-<h2>@Model.CategoryName</h2>
 <input type="hidden" asp-for="@Model.CategoryName"/>
-<h2>@Model.Price</h2>
 <input type="hidden" asp-for="@Model.Price"/>
-<h3>@Model.Description</h3>
 <input type="hidden" asp-for="@Model.Description"/>
 
-<div>
-<label asp-for="@Model.Quantity"></label>
-<input asp-for="@Model.Quantity" type="number" min="1" value="1"/>
-</div>
 
-<button type="submit" model="@Model" class="btn btn-dark">
-<i class="bi bi-plus-circle"></i>Add to Cart</button>
+	<div class="col-lg-8">
+    <div class="right-side-pro-detail border p-3 m-0">
+    <div class="row">
+    <div class="col-lg-12">
+    <span>Name:</span>
+    <p class="m-0 p-0">@Model.Name</p>
+    </div>
+    <div class="col-lg-12">
+    <p class="m-0 p-0 price-pro">@Model.Price kr</p>
+    <hr class="p-0 m-0">
+    </div>
+    <div class="col-lg-12 pt-2">
+    <h5>Product Detail</h5>
+    <span>@Model.Description</span>
+    <hr class="m-0 pt-2 mt-2">
+    </div>
+    <div class="col-lg-12">
+    <span>@Model.CategoryName</span>
+    </div>
+    <div class="col-lg-12">
 
-</form>
-
+    <div>
+    <label asp-for="@Model.Quantity"></label>
+    <input asp-for="@Model.Quantity" type="number" min="1" value="1"/>
+    </div>
+    </div>
+    <div class="clearfix mt-4">
+    <button type="submit" model="Model" class="btn btn-dark pull-right">
+    <i class="bi bi-plus-circle"></i>Add to Cart</button>
+    <button asp-action="Products" class="btn btn-dark pull-right">
+    <i class="bi bi-plus-circle"></i>Back to Products</button>
+    </div>
+    </form>
+    </div>
