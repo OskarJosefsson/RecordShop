@@ -12,7 +12,7 @@ using RecordShopApi.Data;
 namespace RecordShopApi.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20220213095152_init")]
+    [Migration("20220216130957_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

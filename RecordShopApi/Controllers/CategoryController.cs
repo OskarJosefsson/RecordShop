@@ -13,7 +13,7 @@ namespace RecordShopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ApiKeyAuth]
+    //[ApiKeyAuth]
     public class CategoryController : ControllerBase
     {
         private readonly SqlContext _context;

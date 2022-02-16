@@ -20,14 +20,15 @@ namespace RecordShopClassLibrary.Models.Read
             Categories = categories;
         }
 
-        public ProductPageViewModel(IEnumerable<ProductViewModel> products, IEnumerable<SelectListItem> categories, SelectListItem? categoryId)
+        public ProductPageViewModel(IEnumerable<ProductViewModel> products, IEnumerable<ProductViewModel> topProducts, IEnumerable<SelectListItem> categories)
         {
             Products = products;
+            TopProducts = topProducts;
             Categories = categories;
-            CategoryId = categoryId;
         }
 
         public IEnumerable<ProductViewModel> Products { get; set; }
+        public IEnumerable<ProductViewModel> TopProducts { get; set; }
 
         public IEnumerable<SelectListItem> Categories { get; set; }
 

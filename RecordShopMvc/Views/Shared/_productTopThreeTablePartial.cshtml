@@ -1,0 +1,23 @@
+﻿@using RecordShopClassLibrary.Models.Read
+@model IEnumerable<ProductViewModel>
+
+
+
+	<table class="table">
+  <thead>
+    <tr>
+
+      <th scope="col">Top Sellers</th>
+
+    </tr>
+  </thead>
+ <tbody>
+     @foreach(var product in Model)
+     {
+
+         <partial name="_productTopThree" model="product" />
+
+     }
+
+ </tbody>
+</table>

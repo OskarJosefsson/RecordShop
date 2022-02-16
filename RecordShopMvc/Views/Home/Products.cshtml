@@ -5,15 +5,34 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @model ProductPageViewModel
 
-	<div class="text-align-left">
-		<h1>
-	Products
-	</h1>
-	</div>
 
+    <div class="row">
 
-	<partial name="_dropDownPartial" model="Model" />
-	
-    <partial name="_productDeckPartial" model="Model"/>
+        <div class="col-3">
+         
+        </div>
+        <div class="col-3">
+             
+       </div>
+       <div class="col-3">
+             
+        </div>
+
+             <div class="col-3">
+             <partial name="_productTopThreeTablePartial" model="Model.TopProducts" />
+
+        </div>
+
+        </div>
+
+        
+
+    </div>
+        <div class="row">
+        <div class="col-md-8 offset-md-2">
+    <partial name="_productsPartial" model="Model"/>
+
+        </div>
+        </div>
 
 

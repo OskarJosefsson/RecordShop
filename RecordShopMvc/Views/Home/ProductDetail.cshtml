@@ -3,11 +3,13 @@
 <div>
 
 <form asp-action="BuyProduct" method="post">
+
 <input type="hidden" asp-for="@Model.Id"/>
 <input type="hidden" asp-for="@Model.Name"/>
 <input type="hidden" asp-for="@Model.CategoryName"/>
 <input type="hidden" asp-for="@Model.Price"/>
 <input type="hidden" asp-for="@Model.Description"/>
+<input type="hidden" asp-for="@Model.CategoryId"/>
 
 
 	<div class="col-lg-8">
@@ -27,7 +29,8 @@
     <hr class="m-0 pt-2 mt-2">
     </div>
     <div class="col-lg-12">
-    <span>@Model.CategoryName</span>
+    <a asp-controller="Home" asp-action="ProductsSorted" model=@Model asp-route-CategoryId=@Model.CategoryId>@Model.CategoryName</a>
+
     </div>
     <div class="col-lg-12">
 

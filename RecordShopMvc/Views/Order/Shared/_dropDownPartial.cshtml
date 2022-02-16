@@ -1,0 +1,21 @@
+﻿@using RecordShopClassLibrary.Models.Read
+@model ProductPageViewModel
+        <div class="row">
+        <div class="col-3">
+
+        <form asp-action="Products">
+        <label asp-for="@Model.CategoryId"></label>
+        <select asp-for="@Model.CategoryId.Value" asp-items="@Model.Categories" class="form-select">
+        <option value=0>--Select Category--</option>
+        </select>
+        <span asp-validation-for="@Model.CategoryId.Value" class="text-danger"></span>
+        <div class ="col-3">
+            <button type="submit"  asp-controller="Home" asp-action="Products" model="Model" class="btn btn-dark border mt-2" style="width:150px">Sort by Category</button>
+        </div>
+		
+        </form>
+
+        </div>
+         </div>
+
+        

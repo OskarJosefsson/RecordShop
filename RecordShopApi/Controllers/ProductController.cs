@@ -58,7 +58,7 @@ namespace RecordShopApi.Controllers
                 return NotFound();
             }
             CategoryViewModel category = new CategoryViewModel(item.Id, item.Category.Name);
-            ProductViewModel product = new ProductViewModel(item.Id, item.Name, item.Description, item.Price, item.Category.Name,item.CategoryID);
+            ProductViewModel product = new ProductViewModel(item.Id, item.Name, item.Description, item.Price, item.Category.Name,item.CategoryID,item.Category.Id);
             return product;
         }
         #endregion

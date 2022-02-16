@@ -1,0 +1,24 @@
+﻿@using RecordShopClassLibrary.Models.Read
+@model CartPageViewModel
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Price</th>
+      <th scope="col">Category</th>
+      <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+ <tbody>
+            @if(Model.CartItems != null)
+            {
+             foreach(var product in Model.CartItems)
+            {
+
+                <partial name="_cartItemPartial" title="" model="product"/>
+            }
+            }
+
+ </tbody>
+</table>

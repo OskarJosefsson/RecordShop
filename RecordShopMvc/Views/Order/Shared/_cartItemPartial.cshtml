@@ -1,0 +1,25 @@
+﻿@using RecordShopClassLibrary.Models.Create
+@model CartItemCreateModel
+
+<form asp-action="RemoveProduct" method="post">
+	      <tr>
+      <td>@Model.Product.Name</td>
+     <div>
+    <input type="hidden" asp-for="@Model.Product.Id"></input>
+    <input type="hidden" asp-for="@Model.Product.Name"></input>
+      </div>
+      <td>@Model.Product.Price</td>
+      <input type="hidden" asp-for="@Model.Product.Description"></input>
+      <input type="hidden" asp-for="@Model.Product.Price"></input>
+      <td>@Model.Product.CategoryName</td>
+      <input type="hidden" asp-for="@Model.Product.CategoryName"></input>
+      <input type="hidden" asp-for="@Model.Quantity">
+      <td>@Model.Quantity</td>
+      <td>
+      <button type="submit" model="@Model.Product" class="btn btn-dark">
+      <i class="bi bi-plus-circle"></i>Remove</button>   
+      </td>
+      </tr>
+</form>
+
+

@@ -9,6 +9,7 @@ namespace RecordShopMvc.Services
         Task<IEnumerable<ProductViewModel>> GetAllProducts();
         Task<IEnumerable<SelectListItem>> GetAllCategoriesSelectListItem();
         Task<ProductViewModel> GetProduct(int id);
+        Task<IEnumerable<ProductViewModel>> GetTopThreeProducts();
     }
     public class ProductService : IProductService
     {
@@ -91,7 +92,41 @@ namespace RecordShopMvc.Services
             return categories;
         }
 
-        
+        public async Task<IEnumerable<ProductViewModel>> GetTopThreeProducts()
+        {
+            IEnumerable<ProductViewModel> products = new List<ProductViewModel>();
+            IEnumerable<OrderDetailViewModel> orderDetails = new List<OrderDetailViewModel>();
+            using (var client = new HttpClient())
+            {
+                products = await client.GetFromJsonAsync<IEnumerable<ProductViewModel>>("https://localhost:7247/api/product?key=SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c");
+            }
+
+            using (var client = new HttpClient())
+            {
+
+                orderDetails = await client.GetFromJsonAsync<IEnumerable<OrderDetailViewModel>>("https://localhost:7247/api/OrderDetail?key=SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c");
+
+            }
+
+
+
+            var prod = 
+                    (from p in products
+                    from od in orderDetails
+                    where od.ProductId == p.Id
+                    group od by p into productGroups
+                    select new
+                    {
+                        product = productGroups.Key,
+                        numberOfOrders = productGroups.Count()
+                    }
+                    ).OrderByDescending(x => x.numberOfOrders).Distinct().Take(3).ToList();
+
+            var topProd = prod.Select(x => x.product).ToList();
+
+            return topProd;
+
+        }
 
 
     }

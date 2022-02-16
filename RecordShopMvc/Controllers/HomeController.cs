@@ -25,15 +25,19 @@ namespace RecordShopMvc.Controllers
 
         public async Task<IActionResult> Products(ProductPageViewModel model)
         {
+            IEnumerable<ProductViewModel> topProducts = new List<ProductViewModel>();
             IEnumerable<ProductViewModel> products = new List<ProductViewModel> ();
             IEnumerable <SelectListItem> categories = new List<SelectListItem>();
+
+           topProducts = await _productService.GetTopThreeProducts();
+
             if (model.CategoryId == null)
             {
                  products = await _productService.GetAllProducts();
 
                  categories = await _productService.GetAllCategoriesSelectListItem();
 
-                ProductPageViewModel productPageViewModel = new ProductPageViewModel(products, categories);
+                ProductPageViewModel productPageViewModel = new ProductPageViewModel(products, topProducts, categories);
 
                 return View(productPageViewModel);
             }
@@ -44,10 +48,31 @@ namespace RecordShopMvc.Controllers
 
             categories = await _productService.GetAllCategoriesSelectListItem();
 
-            ProductPageViewModel productPageViewModelSort = new ProductPageViewModel(products, categories);
+            ProductPageViewModel productPageViewModelSort = new ProductPageViewModel(products, topProducts, categories);
 
             return View(productPageViewModelSort);
         }
+
+        public async Task<IActionResult> ProductsSorted(ProductViewModel model)
+        {
+            IEnumerable<ProductViewModel> products = new List<ProductViewModel>();
+            IEnumerable<SelectListItem> categories = new List<SelectListItem>();
+            IEnumerable<ProductViewModel> topProducts = new List<ProductViewModel>();
+            int id = Convert.ToInt32(model.CategoryId);
+
+            products = await _productService.GetAllProducts(id);
+            topProducts = await _productService.GetTopThreeProducts();
+            categories = await _productService.GetAllCategoriesSelectListItem();
+
+            ProductPageViewModel productPageViewModelSort = new ProductPageViewModel(products,topProducts, categories);
+
+            return View(productPageViewModelSort);
+
+
+        }
+
+
+
 
 
         public async Task<IActionResult> ProductDetail(int id)
@@ -62,7 +87,7 @@ namespace RecordShopMvc.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> BuyProduct(ProductViewModel model)
+            public async Task<IActionResult> BuyProduct(ProductViewModel model)
         {
             if(SessionService.GetObjectAsJson<List<CartItemCreateModel>>(HttpContext.Session, "shoppingCart") == null)
             {
