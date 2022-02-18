@@ -21,18 +21,22 @@ namespace RecordShopClassLibrary.Models.Create
             CustomerName = customerName;
             
             TotalPrice = totalPrice;
-            AddressId = address;
+           
         }
 
-        
-   
+        public OrderCreateModel(Guid customerId, string customerName, decimal totalPrice, Guid orderId)
+        {
+            CustomerId = customerId;
+            CustomerName = customerName;
+            TotalPrice = totalPrice;
+            OrderId = orderId;
+        }
+
         public Guid CustomerId { get; set; }
 
         public string CustomerName { get; set; }
 
         public decimal TotalPrice { get; set; }
-
-        public int AddressId { get; set; }
 
         public Guid OrderId { get; set; }
 

@@ -10,6 +10,8 @@ using RecordShopClassLibrary.Models.Read;
 using RecordShopMvc.Services;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using RecordShopMvc.Models.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace RecordShopMvc.Services
 {
@@ -17,18 +19,21 @@ namespace RecordShopMvc.Services
     {
         Task<IEnumerable<OrderViewModel>> GetAllOrders(Guid id);
         Task<OrderViewModel> GetOrder(Guid id);
-        Task PostOrder(OrderAddressCreateModel orderAddress);
+        Task PostOrder(AddressCreateModel orderAddress);
+
     }
 
     public class OrderService : IOrderService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICartService _cartService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrderService(IHttpContextAccessor httpContextAccessor, ICartService cartService)
+        public OrderService(IHttpContextAccessor httpContextAccessor, ICartService cartService, UserManager<ApplicationUser> userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _cartService = cartService;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<OrderViewModel>> GetAllOrders(Guid customerId)
@@ -39,6 +44,8 @@ namespace RecordShopMvc.Services
             IEnumerable<ProductViewModel> products = new List<ProductViewModel>();
             IEnumerable<OrderDetailViewModel> orderDetails = new List<OrderDetailViewModel>();
             products = await productService.GetAllProducts();
+           
+
             using (var client = new HttpClient())
             {
                 orders = await client.GetFromJsonAsync<IEnumerable<OrderViewModel>>($"https://localhost:7247/api/Order/?key=SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c");
@@ -116,20 +123,34 @@ namespace RecordShopMvc.Services
             return order;
         }
 
-        public async Task PostOrder(OrderAddressCreateModel orderAddress)
+        public async Task PostOrder(AddressCreateModel address)
         {
-
-
+            OrderAddressCreateModel model = new OrderAddressCreateModel();
+            OrderCreateModel model2 = new OrderCreateModel();
+            List<CartItemCreateModel> cartItems = new List<CartItemCreateModel>();
+            cartItems = SessionService.GetObjectAsJson<List<CartItemCreateModel>>(_httpContextAccessor.HttpContext.Session, "shoppingCart");
+  
             Guid orderId = Guid.NewGuid();
-            orderAddress.Order.OrderId = orderId;
-            orderAddress.Address.OrderId = orderId;
-            orderAddress.Order.TotalPrice = TotalPrice(orderAddress.CartItems);
-            orderAddress.Order.CustomerId = GetId();
+            model.Address = address;
+            model2.OrderId = orderId;
+            model.Address.OrderId = orderId;
+            model.CartItems = cartItems;
+            model2.TotalPrice = TotalPrice(model.CartItems);
+            model2.CustomerId = GetId();
+            model2.CustomerName = GetName();
+
+            model.Order = model2;
+
+            model.CartItems = cartItems;
+
 
             using (var client = new HttpClient())
             {
-               await client.PostAsJsonAsync<OrderAddressCreateModel>("https://localhost:7247/api/order/?key=SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", orderAddress);
+               await client.PostAsJsonAsync<OrderAddressCreateModel>("https://localhost:7247/api/order/?key=SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c", model);
             }
+
+            cartItems.Clear();
+            SessionService.SetObjectAsJson(_httpContextAccessor.HttpContext.Session, "shoppingCart", cartItems);
 
         }
 
@@ -163,6 +184,7 @@ namespace RecordShopMvc.Services
         }
 
 
+
         public Guid GetId()
         {
 
@@ -171,7 +193,15 @@ namespace RecordShopMvc.Services
             return new Guid(claim.Value);
         }
 
-
+        public string GetName() 
+        {
+            
+        var claimsIdentity = (ClaimsIdentity)_httpContextAccessor.HttpContext.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ApplicationUser currentUser = _userManager.Users.FirstOrDefault(x => x.Id == claim.Value);
+            string name = currentUser.FirstName + " " + currentUser.LastName;
+            return name;
+        }
 
     }
 }

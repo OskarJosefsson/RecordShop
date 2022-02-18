@@ -165,7 +165,7 @@ namespace RecordShopApi.Controllers
         #endregion
         // DELETE: api/Order/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOrderE(Guid id)
+        public async Task<IActionResult> DeleteOrder(Guid id)
         {
             var orderEntity = await _context.Orders.FindAsync(id);
             if (orderEntity == null)

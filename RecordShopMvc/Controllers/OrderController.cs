@@ -37,43 +37,29 @@ namespace RecordShopMvc.Controllers
             return View(orders);
         }
 
-        public async Task<IActionResult> Address(OrderAddressCreateModel model)
+        public async Task<IActionResult> Address()
         {
-            return View(model);
+            return View();
         }
 
 
-        public async Task<ActionResult> OrderCreated(OrderAddressCreateModel model)
+        public async Task<ActionResult> OrderCreated(AddressCreateModel model)
         {
-
-
-            List<CartItemCreateModel> cartItems = new List<CartItemCreateModel>();
-            cartItems = SessionService.GetObjectAsJson<List<CartItemCreateModel>>(HttpContext.Session, "shoppingCart");
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            ApplicationUser currentUser = _userManager.Users.FirstOrDefault(x => x.Id == claim.Value);
-
-
-
-            string myName = currentUser.FirstName + " " + currentUser.LastName;
-            model.Order.CustomerName = myName;
-        
-            model.CartItems = cartItems;
-
-
-            await _orderService.PostOrder(model);
-
-            foreach (var item in cartItems)
+            if (ModelState.IsValid)
             {
-                Console.WriteLine(item.Product.Name);
+
+                await _orderService.PostOrder(model);
+
+  
+
+                return RedirectToAction("Products", "Home");
             }
+
+
+
+            return RedirectToAction("Address");
+
             
-            cartItems.Clear();
-            SessionService.SetObjectAsJson(HttpContext.Session, "shoppingCart", cartItems);
-
-
-
-            return RedirectToAction("Products", "Home");
 
         }
     }

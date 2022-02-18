@@ -71,10 +71,6 @@ namespace RecordShopMvc.Controllers
 
         }
 
-
-
-
-
         public async Task<IActionResult> ProductDetail(int id)
         {
             ProductViewModel product = new ProductViewModel();
